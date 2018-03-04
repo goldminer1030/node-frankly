@@ -4,14 +4,18 @@ var mongoose = require('mongoose');
 var passport = require('../config/passport.js');
 
 router.get('/', function (req, res) {
-  res.render('users/login', { error: req.flash('error') });
+  res.render('reset_password/reset_password', {
+    email: req.flash("email")[0],
+    loginError: req.flash('loginError'),
+    loginMessage: req.flash('loginMessage')
+  });
 });
 
 router.post('/', passport.authenticate('local-login', {
-    successRedirect: '/',
-    failureRedirect: '/login',
-    failureFlash: true
-  })
+  successRedirect: '/posts',
+  failureRedirect: '/login',
+  failureFlash: true
+})
 );
 
 module.exports = router;

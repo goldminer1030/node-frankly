@@ -6,17 +6,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Frankly</title>
+
+  <link href="/css/normalize.css" rel="stylesheet">
+  <link href="/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/css/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="/css/style.css" rel="stylesheet">
+
 </head>
 
 <body>
-  <header>
-    Header
+  <header id="site-header">
+    <% include partials/header %>
   </header>
-  <div id="main" style="border: 1px solid #dedede;">
+  <div id="site-content" role="main">
     <%- body %>
   </div>
-  <footer>
-    Footer
+  <style>
+    .footer-mobile,
+    footer {
+      display: initial;
+    }
+    @media screen and (max-width: 767px) {
+      .navbar-fixed-top {
+        position: absolute!important;
+      }
+    }
+  </style>
+  <footer class="hidden-xs navbar-fixed-bottom" id="site-footer" role="contentinfo">
+    <% include partials/footer %>
   </footer>
   <%- script %>
 </body>

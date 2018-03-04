@@ -1,0 +1,88 @@
+<div class="container-fluid">
+  <div class="row first-row">
+    <div class="col-lg-12">
+      <h1 class="light main-title">Log in and know the truth</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <h4 class="light sub-title">
+        <span>directly</span>
+      </h4>
+      <a href="/auth/facebook" class="social social-fb">
+        <i class="icon ion-social-facebook"></i>Via Facebook</a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 form-box">
+      <h4 class="light sub-title">
+        <span>Or by entering your data</span>
+      </h4>
+      <% if ( error.length > 0 ) { %>
+      <div class="col-md-12">
+        <div class="alert alert-danger alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">×</span>
+            <span class="sr-only">Close</span>
+          </button>
+          <p><%= error %></p>
+          </div>
+        </div>
+      <% } %>
+      <div class="form-container container">
+        <div class="row">
+          <div class="register">
+            <form action="/register" method="post">
+              <div class="form-group">
+                <label for="name">Full name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Enter your full name" value="" required>
+              </div>
+              <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="text" class="form-control" id="email" name="email" placeholder="Enter your email address" value="" required>
+              </div>
+              <div class="form-group">
+                <label for="password">password</label>
+                <input type="password" id="password" class="form-control" name="password" placeholder="Choose your password" required>
+              </div>
+              <div class="form-group">
+                <label for="password">password confirmation</label>
+                <input type="password" id="password_confirm" class="form-control" name="password_confirm" placeholder="Re-enter your password" required>
+              </div>
+              <div class="form-group">
+                <label for="username">personal picture</label>
+                <input class="filestyle" type="file" name="user_image" accept="image/*" data-iconname="glyphicon glyphicon-picture" data-input="false"
+                id="filestyle-0" tabindex="-1" style="position: absolute; clip: rect(0px, 0px, 0px, 0px);">
+                <div class="bootstrap-filestyle input-group">
+                  <span class="group-span-filestyle " tabindex="0">
+                    <label for="filestyle-0" class="btn btn-default ">
+                      <span class="icon-span-filestyle glyphicon glyphicon-picture"></span>
+                      <span class="buttonText">Download</span>
+                    </label>
+                  </span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="email">Link</label>
+                <div class="input-group">
+                  <input type="text" class="usernameregister fr" id="username" name="username" aria-describedby="link" value="" required>
+                  <span class="input-group-addon fr" id="link">saraha.online</span>
+                </div>
+              </div>
+              <input type="submit" class="btnsubmit light" id="submitregister" name="submit_register" value="Create an account">
+              <div class="registerloading">
+                <div class="spinner">
+                  <div class="rect1"></div>
+                  <div class="rect2"></div>
+                  <div class="rect3"></div>
+                  <div class="rect4"></div>
+                  <div class="rect5"></div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

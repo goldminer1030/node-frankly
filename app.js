@@ -6,14 +6,14 @@ var expressLayouts = require('express-ejs-layouts');
 var path = require('path');
 var mongoose = require('mongoose');
 var session = require('express-session');
-var flash = require('connect-flash');
+var flash = require('express-flash');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 
 var app = express();
 
 // Database
-mongoose.connect('mongodb://root:2194zLn#8vl7@ds255258.mlab.com:55258/frankly-db');
+mongoose.connect('mongodb://root:rootroot@ds153978.mlab.com:53978/frankly-db');
 var db = mongoose.connection;
 db.once("open", function () {
   console.log("DB connected!");
@@ -36,18 +36,25 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(flash());
-app.use(session({ secret: 'MySecret', resave: true, saveUninitialized: false }));
+app.use(session({
+  secret: 'MySecret',
+  resave: false,
+  saveUninitialized: true
+}));
 
 // Passport
 var passport = require('./config/passport');
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
 
 // Routes
 app.use('/', require('./routes/home'));
-// app.use('/login', require('./routes/login'));
-// app.use('/register', require('./routes/register'));
+app.use('/privacy', require('./routes/privacy'));
+app.use('/terms', require('./routes/terms'));
+app.use('/login', require('./routes/login'));
+app.use('/reset_password', require('./routes/reset_password'));
+app.use('/register', require('./routes/register'));
 
 // Start Server
 var port = process.env.PORT || 3000;
