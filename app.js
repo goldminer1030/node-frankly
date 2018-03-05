@@ -49,12 +49,24 @@ app.use(passport.session());
 app.use(flash());
 
 // Routes
+app.use(function (req, res, next) {
+  res.locals.login = req.isAuthenticated();
+  next();
+});
 app.use('/', require('./routes/home'));
 app.use('/privacy', require('./routes/privacy'));
 app.use('/terms', require('./routes/terms'));
 app.use('/login', require('./routes/login'));
 app.use('/reset_password', require('./routes/reset_password'));
 app.use('/register', require('./routes/register'));
+
+function isAuthenticated(req, res, next) {
+  if (req.user) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
 // Start Server
 var port = process.env.PORT || 3000;

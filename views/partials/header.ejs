@@ -11,7 +11,11 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-right">
         <li>
+          <% if (login) { %>
+          <a href="/logout">
+          <% } else { %>
           <a href="/login">
+          <% } %>
             <i class="ion-person header-icon"></i>My Account</a>
         </li>
       </ul>

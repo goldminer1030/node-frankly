@@ -1,0 +1,118 @@
+<div class="container-fluid profile-header">
+  <div class="row">
+    <div class="avatar fitbg" style="background:url(http://saraha.online/assets/user_img/d51da72fea3b1d71e1b71ddde06e0992.jpg)"></div>
+
+    <% if (user.fullname) { %>
+    <h1 class="light username fr">
+      <%= user.fullname %>
+    </h1>
+    <a class="editprofile" href="/profile">
+      <i class="ion-gear-a"></i>Change settings</a>
+    <% } %>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="row profile-content">
+    <p>Publish your page
+      <br>Discover the truth from your friends</p>
+    <% if (user.username) { %>
+    <div class="share-box col-xs-12">
+      <div class="col-xs-6">
+        <a target="_blank" href="https://twitter.com/home?status=http://<%= user.username %>.saraha.online" class="share-social social-twitter">
+          <i class="icon ion-social-twitter"></i>On Twitter</a>
+      </div>
+      <div class="col-xs-6">
+        <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://<%= user.username %>.saraha.online" class="share-social social-fb">
+          <i class="icon ion-social-facebook"></i>On Facebook</a>
+      </div>
+    </div>
+    <div class="input-group">
+      <span type="text" id="copybtn" class="js-textareacopybtn js-copytextarea fr">http://<%= user.username %>.saraha.online</span>
+      <span id="copythis" class="hidden">http://<%= user.username %>.saraha.online</span>
+      <span class="input-group-addon light js-textareacopybtn" id="link" style="cursor: pointer;right: 0px; height: 34px; border: 1px solid #f1f5f9; font-size:15px">
+        <i class="fa fa-link" aria-hidden="true"></i>
+      </span>
+    </div>
+    <% } %>
+  </div>
+  <p id="messages"></p>
+  <h1 class="light last-message" style="margin-top: 40px;">Latest messages</h1>
+  <hr class="main-hr" style="margin-bottom: 10px;">
+  <div class="alert alert-info alert-dismissible message-alert" role="alert" data-id="11852691">
+    <button type="button" class="close" data-dismiss="alert">
+      <span aria-hidden="true">×</span>
+      <span class="sr-only">Close</span>
+    </button>
+    <span class="messagespan fr">asdasasdasdas</span>
+    <div class="info">
+      <span class="pull-left fr">03/03/2018 08:01</span>
+      <span class="pull-right" style="color: #07897F">
+        <i class="fa fa-user-circle-o" aria-hidden="true"></i>Anonymous</span>
+    </div>
+  </div>
+  <div class="alert alert-info alert-dismissible message-alert" role="alert" data-id="11852651">
+    <button type="button" class="close" data-dismiss="alert">
+      <span aria-hidden="true">×</span>
+      <span class="sr-only">Close</span>
+    </button>
+    <span class="messagespan fr">sdfsdfsdfsd</span>
+    <div class="info">
+      <span class="pull-left fr">03/03/2018 07:59</span>
+      <span class="pull-right" style="color: #CA5219">
+        <i class="fa fa-user-circle-o" aria-hidden="true"></i>Anonymous</span>
+    </div>
+  </div>
+  <div class="alert alert-info alert-dismissible message-alert" role="alert" data-id="11850087">
+    <button type="button" class="close" data-dismiss="alert">
+      <span aria-hidden="true">×</span>
+      <span class="sr-only">Close</span>
+    </button>
+    <span class="messagespan fr">hello</span>
+    <div class="info">
+      <span class="pull-left fr">03/03/2018 02:51</span>
+      <span class="pull-right" style="color: #31849B">
+        <i class="fa fa-user-circle-o" aria-hidden="true"></i>Anonymous</span>
+    </div>
+  </div>
+  <div class="alert alert-info alert-dismissible message-alert" role="alert" data-id="11849907">
+    <button type="button" class="close" data-dismiss="alert">
+      <span aria-hidden="true">×</span>
+      <span class="sr-only">Close</span>
+    </button>
+    <span class="messagespan fr">are you there?</span>
+    <div class="info">
+      <span class="pull-left fr">03/03/2018 02:22</span>
+      <span class="pull-right" style="color: #893536">
+        <i class="fa fa-user-circle-o" aria-hidden="true"></i>Anonymous</span>
+    </div>
+  </div>
+  <div class="alert alert-info alert-dismissible message-alert" role="alert" data-id="11849900">
+    <button type="button" class="close" data-dismiss="alert">
+      <span aria-hidden="true">×</span>
+      <span class="sr-only">Close</span>
+    </button>
+    <span class="messagespan fr">hello</span>
+    <div class="info">
+      <span class="pull-left fr">03/03/2018 02:21</span>
+      <span class="pull-right" style="color: #A21C1C">
+        <i class="fa fa-user-circle-o" aria-hidden="true"></i>Anonymous</span>
+    </div>
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    $(".message-alert").on("closed.bs.alert", function (event) {
+      var _that = $(this);
+      event.preventDefault();
+      console.log("done");
+      $.ajax({
+        type: "POST",
+        url: "/delete",
+        dataType: "json",
+        data: {
+          id: $(_that).data("id")
+        },
+      });
+    });
+  });
+</script>
