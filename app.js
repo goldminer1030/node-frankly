@@ -69,7 +69,7 @@ function isAuthenticated(req, res, next) {
 }
 
 // Start Server
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 80;
 app.listen(port, function () {
   console.log('Server On!');
 });
