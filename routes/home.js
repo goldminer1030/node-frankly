@@ -1,25 +1,43 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/User');
+var Message = require('../models/Message');
 
 router.get('/', function (req, res) {
   var domain = req.get('host').match(/\w+/); // e.g., host: "subdomain.website.com"
+  
   if (domain) {
-    var subdomain = domain[0]; // Use "subdomain"
-    
     if (!req.user && (domain == 'www' || domain == 'localhost')) {
       // if main domain
       res.render('index');
     } else {
+      var subdomain = domain[0]; // Use "subdomain"
+
+      if(req.user) {
+        subdomain = req.user.username;
+      }
       User.findOne({ username: subdomain }, function (err, user) {
         if (!err && user) {
           if (req.user && subdomain == req.user.username) {
-            res.render('users/profile', {
-              user: req.user
+            Message.find({ username: subdomain }, function (err, message) {
+              if (!err && message) {
+                res.render('users/profile', {
+                  user: req.user,
+                  messages: message
+                });
+              } else {
+                res.render('users/profile', {
+                  user: req.user,
+                  messages: null
+                });
+              }
             });
           } else {
             res.render('users/message', {
-              user: user
+              user: user,
+              isReSend: false,
+              success: false,
+              message: ''
             });
           }
         } else {
@@ -31,17 +49,58 @@ router.get('/', function (req, res) {
   }
 });
 
-router.post('/delete', function (req, res, next) {
-  var userId = req.body.id || req.query.id;
+router.post('/', function (req, res, next) {
+  var type = req.body.type;
 
-  console.log(userId);
-  // User.remove({ _id: userId }, function (err, res) {
-  //   if (err) {
-  //     res.json({ "err": err });
-  //   } else {
-  //     res.json({ success: true });
-  //   }
-  // });
+  if(type == 'send-msg') {
+    // SEND MESSAGE ==============================
+    var domain = req.get('host').match(/\w+/); // e.g., host: "subdomain.website.com"
+    var message = req.body.textmessage;
+  
+    if (domain) {
+      var subdomain = domain[0]; // Use "subdomain"
+      if (req.user || (subdomain != 'www' && subdomain != 'localhost')) {
+        User.findOne({ username: subdomain }, function (err, user) {
+          if (!err && user) {
+            // create new message
+            var newMessage = new Message();
+  
+            newMessage.username = subdomain;
+            newMessage.content = message;
+  
+            newMessage.save(function (err) {
+              var isSuccess = true;
+              if (err) isSuccess = false;
+              
+              res.render('users/message', {
+                user: user,
+                isReSend: true,
+                success: isSuccess,
+                message: message
+              });
+            });
+          } else {
+            res.redirect('/');
+          }
+        });
+      }
+    }
+  } else if (type == 'delete-msg') {
+    // DELETE MESSAGE ==============================
+    var messageId = req.body.id || req.query.id;
+    var domain = req.get('host').match(/\w+/); // e.g., host: "subdomain.website.com"
+
+    if (domain) {
+      var subdomain = domain[0]; // Use "subdomain"
+      if (req.user || (subdomain != 'www' && subdomain != 'localhost')) {
+        Message.findOneAndRemove({ _id: messageId, username: subdomain }, function (err, message) {
+          if (err) return res.json({ success: false, message: err });
+          if (!message) return res.json({ success: false, message: "No data found to delete" });
+          res.redirect('/');
+        });
+      }
+    }
+  }
 });
 
 // LOGOUT ==============================

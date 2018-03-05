@@ -1,6 +1,11 @@
 <div class="container-fluid profile-header">
   <div class="row">
-    <div class="avatar fitbg" style="background:url(http://saraha.online/assets/user_img/d51da72fea3b1d71e1b71ddde06e0992.jpg)"></div>
+
+    <% if (user.picture) { %>
+      <div class="avatar fitbg" style="background:url(<%= user.picture %>)"></div>
+    <% } else { %>
+      <div class="avatar fitbg" style="background:url(/img/default.gif)"></div>
+    <% } %>
 
     <% if (user.fullname) { %>
     <h1 class="light username fr">
@@ -38,66 +43,20 @@
   <p id="messages"></p>
   <h1 class="light last-message" style="margin-top: 40px;">Latest messages</h1>
   <hr class="main-hr" style="margin-bottom: 10px;">
-  <div class="alert alert-info alert-dismissible message-alert" role="alert" data-id="11852691">
+  <% messages.forEach(function(message){ %>
+  <div class="alert alert-info alert-dismissible message-alert" role="alert" data-id="<%= message._id %>">
     <button type="button" class="close" data-dismiss="alert">
       <span aria-hidden="true">×</span>
       <span class="sr-only">Close</span>
     </button>
-    <span class="messagespan fr">asdasasdasdas</span>
+    <span class="messagespan fr"><%= message.content %></span>
     <div class="info">
-      <span class="pull-left fr">03/03/2018 08:01</span>
+      <span class="pull-left fr"><%= message.createdAt %></span>
       <span class="pull-right" style="color: #07897F">
         <i class="fa fa-user-circle-o" aria-hidden="true"></i>Anonymous</span>
     </div>
   </div>
-  <div class="alert alert-info alert-dismissible message-alert" role="alert" data-id="11852651">
-    <button type="button" class="close" data-dismiss="alert">
-      <span aria-hidden="true">×</span>
-      <span class="sr-only">Close</span>
-    </button>
-    <span class="messagespan fr">sdfsdfsdfsd</span>
-    <div class="info">
-      <span class="pull-left fr">03/03/2018 07:59</span>
-      <span class="pull-right" style="color: #CA5219">
-        <i class="fa fa-user-circle-o" aria-hidden="true"></i>Anonymous</span>
-    </div>
-  </div>
-  <div class="alert alert-info alert-dismissible message-alert" role="alert" data-id="11850087">
-    <button type="button" class="close" data-dismiss="alert">
-      <span aria-hidden="true">×</span>
-      <span class="sr-only">Close</span>
-    </button>
-    <span class="messagespan fr">hello</span>
-    <div class="info">
-      <span class="pull-left fr">03/03/2018 02:51</span>
-      <span class="pull-right" style="color: #31849B">
-        <i class="fa fa-user-circle-o" aria-hidden="true"></i>Anonymous</span>
-    </div>
-  </div>
-  <div class="alert alert-info alert-dismissible message-alert" role="alert" data-id="11849907">
-    <button type="button" class="close" data-dismiss="alert">
-      <span aria-hidden="true">×</span>
-      <span class="sr-only">Close</span>
-    </button>
-    <span class="messagespan fr">are you there?</span>
-    <div class="info">
-      <span class="pull-left fr">03/03/2018 02:22</span>
-      <span class="pull-right" style="color: #893536">
-        <i class="fa fa-user-circle-o" aria-hidden="true"></i>Anonymous</span>
-    </div>
-  </div>
-  <div class="alert alert-info alert-dismissible message-alert" role="alert" data-id="11849900">
-    <button type="button" class="close" data-dismiss="alert">
-      <span aria-hidden="true">×</span>
-      <span class="sr-only">Close</span>
-    </button>
-    <span class="messagespan fr">hello</span>
-    <div class="info">
-      <span class="pull-left fr">03/03/2018 02:21</span>
-      <span class="pull-right" style="color: #A21C1C">
-        <i class="fa fa-user-circle-o" aria-hidden="true"></i>Anonymous</span>
-    </div>
-  </div>
+  <% }) %>
 </div>
 <script>
   $(document).ready(function () {
@@ -107,9 +66,10 @@
       console.log("done");
       $.ajax({
         type: "POST",
-        url: "/delete",
+        url: "/",
         dataType: "json",
         data: {
+          type: 'delete-msg',
           id: $(_that).data("id")
         },
       });

@@ -13,7 +13,7 @@ var cookieParser = require('cookie-parser');
 var app = express();
 
 // Database
-mongoose.connect('mongodb://root:rootroot@ds153978.mlab.com:53978/frankly-db');
+mongoose.connect('mongodb://root:rootroot@ds135624.mlab.com:35624/frankly-db');
 var db = mongoose.connection;
 db.once("open", function () {
   console.log("DB connected!");

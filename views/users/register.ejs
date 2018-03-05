@@ -9,7 +9,7 @@
       <h4 class="light sub-title">
         <span>directly</span>
       </h4>
-      <a href="/auth/facebook" class="social social-fb">
+      <a href="/register/facebook" class="social social-fb">
         <i class="icon ion-social-facebook"></i>Via Facebook</a>
     </div>
   </div>
@@ -32,7 +32,7 @@
       <div class="form-container container">
         <div class="row">
           <div class="register">
-            <form action="/register" method="post">
+            <form action="/register" enctype="multipart/form-data" method="post">
               <div class="form-group">
                 <label for="name">Full name</label>
                 <input type="text" class="form-control" id="name" name="name" placeholder="Enter your full name" value="" required>
@@ -51,7 +51,7 @@
               </div>
               <div class="form-group">
                 <label for="username">personal picture</label>
-                <input class="filestyle" type="file" name="user_image" accept="image/*" data-iconname="glyphicon glyphicon-picture" data-input="false"
+                <input class="filestyle" type="file" name="img" accept="image/*" data-iconname="glyphicon glyphicon-picture" data-input="false"
                 id="filestyle-0" tabindex="-1" style="position: absolute; clip: rect(0px, 0px, 0px, 0px);">
                 <div class="bootstrap-filestyle input-group">
                   <span class="group-span-filestyle " tabindex="0">

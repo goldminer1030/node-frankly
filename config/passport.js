@@ -2,6 +2,7 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
 var User = require('../models/User');
+var fs = require('fs');
 
 passport.serializeUser(function (user, done) {
   done(null, user.id);
@@ -99,24 +100,58 @@ passport.use('local-register',
             });
           } else {
 
-            // create the user
-            var newUser = new User();
-
-            newUser.fullname = req.body.name;
-            newUser.email = email;
-            newUser.password = password;
-            newUser.username = req.body.username;
-
-            newUser.save(function (err) {
-              if (err)
-                return done(err);
-
-              return done(null, newUser, {
-                message: "Thank you for registration!"
+            if (req.file.path) {
+              var tmp_path = req.file.path;
+  
+              /** The original name of the uploaded file
+                  stored in the variable "originalname". **/
+              var target_path = 'public/uploads/' + req.file.originalname;
+              var real_path = '/uploads/' + req.file.originalname;
+  
+              /** A better way to copy the uploaded file. **/
+              var src = fs.createReadStream(tmp_path);
+              var dest = fs.createWriteStream(target_path);
+              src.pipe(dest);
+              src.on('error', function (err) { return done(err); });
+              src.on('end', function () {
+                // create the user
+                var newUser = new User();
+  
+                newUser.fullname = req.body.name;
+                newUser.email = email;
+                newUser.password = password;
+                newUser.picture = real_path;
+                newUser.username = req.body.username;
+  
+                newUser.save(function (err) {
+                  if (err)
+                    return done(err);
+  
+                  return done(null, newUser, {
+                    message: "Thank you for registration!"
+                  });
+                });
               });
-            });
+            } else {
+              // create the user
+              var newUser = new User();
+  
+              newUser.fullname = req.body.name;
+              newUser.email = email;
+              newUser.password = password;
+              newUser.picture = null;
+              newUser.username = req.body.username;
+  
+              newUser.save(function (err) {
+                if (err)
+                  return done(err);
+  
+                return done(null, newUser, {
+                  message: "Thank you for registration!"
+                });
+              });
+            }
           }
-
         });
 
         // if the user is logged in but has no local account...
@@ -154,27 +189,83 @@ passport.use('local-register',
   })
 );
 
-passport.use('facebook-login',
+passport.use('facebook',
   new FacebookStrategy({
     clientID: '503215930079850',
     clientSecret: '36a372af559a0b9f6dba8fdd6de17bf9',
-    callbackURL: 'auth/facebook/callback',
+    callbackURL: 'register/facebook/callback',
     passReqToCallback: true,
   },
-    function (req, accessToken, refreshToken, profile, done) {
-      User.findOne({ id: profile.id }, (err, user) => {
-        if (user) {
-          return done(err, user);
-        } // Login if account exists
-        const newUser = new User({ // Create if not exists
-          id: profile.id
+  function (req, accessToken, refreshToken, profile, done) {
+    // asynchronous
+    process.nextTick(function () {
+
+      // check if the user is already logged in
+      if (!req.user) {
+
+        var email = (profile.emails[0].value || '').toLowerCase();
+        User.findOne({ 'email': email }, function (err, user) {
+          if (err)
+            return done(err);
+
+          if (user) {
+
+            user.fullname = profile.name.givenName + ' ' + profile.name.familyName;
+            user.email = email;
+
+            user.save(function (err) {
+              if (err)
+                return done(err);
+
+              return done(null, user);
+            });
+          } else {
+            // if there is no user, create them
+            var newUser = new User();
+
+            newUser.fullname = profile.name.givenName + ' ' + profile.name.familyName;
+            newUser.username = profile.id;
+            newUser.email = email;
+
+            newUser.save(function (err) {
+              if (err)
+                return done(err);
+
+              return done(null, newUser);
+            });
+          }
         });
-        newUser.save((user) => {
-          return done(null, user); // Login after creting new
+
+      } else {
+        // user already exists and is logged in, we have to link accounts
+        var user = req.user; // pull the user out of the session
+
+        user.facebook.id = profile.id;
+        user.facebook.token = token;
+        user.facebook.name = profile.name.givenName + ' ' + profile.name.familyName;
+        user.facebook.email = (profile.emails[0].value || '').toLowerCase();
+
+        user.save(function (err) {
+          if (err)
+            return done(err);
+
+          return done(null, user);
         });
-      });
-    }
-  )
+
+      }
+    });
+    // User.findOne({ id: profile.id }, (err, user) => {
+    //   if (user) {
+    //     return done(err, user);
+    //   } // Login if account exists
+    //   const newUser = new User({ // Create if not exists
+    //     id: profile.id
+    //   });
+    //   newUser.save((user) => {
+    //     return done(null, user); // Login after creting new
+    //   });
+    // });
+  })
 );
 
 module.exports = passport;

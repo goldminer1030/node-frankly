@@ -34,7 +34,6 @@ var User = mongoose.model('user', userSchema);
 module.exports = User;
 
 function hashPassword(next) {
-  console.log("hi");
   var user = this;
   if (!user.isModified("password")) {
     return next();

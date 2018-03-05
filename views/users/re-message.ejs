@@ -1,0 +1,50 @@
+<div class="container-fluid profile-header">
+  <div class="row">
+    <div class="avatar fitbg" style="background:url(http://saraha.online/assets/user_img/default.jpg)"></div>
+    <% if (user.fullname) { %>
+      <h1 class="light username fr">
+        <%= user.fullname %>
+      </h1>
+      <% } %>
+        <h4 class="light sub-username">I encountered frankness</h4>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="row profile-content messagesendarea">
+    <h1 id="messageh1" class="light last-message hidden-xs">write a message</h1>
+    <% if (success) { %>
+    <div id="results">
+      <div class="alert alert-success alert-dismissible" role="alert" id="alertmsg">
+        <button type="button" class="close" data-dismiss="alert">
+          <span aria-hidden="true">×</span>
+          <span class="sr-only">Close</span>
+        </button>Message sent successfully</div>
+    </div>
+    <% } %>
+  </div>
+  <div class="buttons" style="display: block;">
+    <div class="share-box col-xs-12" style="max-width: 460px; text-align: center;">
+      <div class="col-xs-6">
+        <a onclick="location.reload()" class="share-social btns-blue">new message
+          <i class="icon ion-plus fright"></i>
+        </a>
+      </div>
+      <div class="col-xs-6">
+        <a href="/register" class="share-social btns-blue">Create an account
+          <i class="icon ion-person fright"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+  <% if (message) { %>
+  <div id="result">
+    <div class="alert alert-info message-alert" role="alert" style="margin-top: 20px;">
+      <span class="messagespan" id="resultmsg"><%= message %></span>
+      <div class="info">
+        <span class="pull-right" style="color: #A68402">
+          <i class="fa fa-user-circle-o" aria-hidden="true"></i>Anonymous</span>
+      </div>
+    </div>
+  </div>
+  <% } %>
+</div>
