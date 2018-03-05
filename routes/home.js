@@ -42,7 +42,8 @@ router.get('/', function (req, res) {
           }
         } else {
           // no user with this subdomain
-          res.render('404');
+          // res.render('404');
+          res.render('index');
         }
       });
     }
