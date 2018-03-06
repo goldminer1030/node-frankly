@@ -203,6 +203,7 @@ passport.use('facebook',
       // check if the user is already logged in
       if (!req.user) {
 
+        console.log(profile);
         var email = (profile.emails[0].value || '').toLowerCase();
         User.findOne({ 'email': email }, function (err, user) {
           if (err)
