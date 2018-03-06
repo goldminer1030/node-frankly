@@ -193,7 +193,7 @@ passport.use('facebook',
   new FacebookStrategy({
     clientID: '503215930079850',
     clientSecret: '36a372af559a0b9f6dba8fdd6de17bf9',
-    callbackURL: '/auth/facebook/callback',
+    callbackURL: 'https://evening-forest-79351.herokuapp.com/auth/facebook/callback',
     passReqToCallback: true,
   },
   function (req, accessToken, refreshToken, profile, done) {
