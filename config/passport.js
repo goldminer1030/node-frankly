@@ -254,17 +254,6 @@ passport.use('facebook',
 
       }
     });
-    // User.findOne({ id: profile.id }, (err, user) => {
-    //   if (user) {
-    //     return done(err, user);
-    //   } // Login if account exists
-    //   const newUser = new User({ // Create if not exists
-    //     id: profile.id
-    //   });
-    //   newUser.save((user) => {
-    //     return done(null, user); // Login after creting new
-    //   });
-    // });
   })
 );
 

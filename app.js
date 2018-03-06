@@ -54,6 +54,7 @@ app.use(function (req, res, next) {
   next();
 });
 app.use('/', require('./routes/home'));
+app.use('/profile', require('./routes/profile'));
 app.use('/privacy', require('./routes/privacy'));
 app.use('/terms', require('./routes/terms'));
 app.use('/login', require('./routes/login'));
