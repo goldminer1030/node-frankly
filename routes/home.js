@@ -5,14 +5,14 @@ var Message = require('../models/Message');
 
 router.get('/', function (req, res) {
   var domain = req.get('host').match(/\w+/); // e.g., host: "subdomain.website.com"
-  
+  console.log("domain", domain);
   if (domain) {
-    if (!req.user && (domain == 'www' || domain == 'localhost' || domain == 'jetintegrationapp.com')) {
+    if (!req.user && (domain == 'www' || domain == 'localhost' || domain == 'wearehighlyeffective.website')) {
       // if main domain
       res.render('index');
     } else {
       var subdomain = domain[0]; // Use "subdomain"
-
+      console.log("subdomain", subdomain);
       if(req.user) {
         subdomain = req.user.username;
       }
@@ -60,7 +60,7 @@ router.post('/', function (req, res, next) {
   
     if (domain) {
       var subdomain = domain[0]; // Use "subdomain"
-      if (req.user || (subdomain != 'www' && subdomain != 'localhost' && domain != 'jetintegrationapp.com')) {
+      if (req.user || (subdomain != 'www' && subdomain != 'localhost' && domain != 'wearehighlyeffective.website')) {
         User.findOne({ username: subdomain }, function (err, user) {
           if (!err && user) {
             // create new message
@@ -93,7 +93,7 @@ router.post('/', function (req, res, next) {
 
     if (domain) {
       var subdomain = domain[0]; // Use "subdomain"
-      if (req.user || (subdomain != 'www' && subdomain != 'localhost' && domain != 'jetintegrationapp.com')) {
+      if (req.user || (subdomain != 'www' && subdomain != 'localhost' && domain != 'wearehighlyeffective.website')) {
         Message.findOneAndRemove({ _id: messageId, username: subdomain }, function (err, message) {
           if (err) return res.json({ success: false, message: err });
           if (!message) return res.json({ success: false, message: "No data found to delete" });
