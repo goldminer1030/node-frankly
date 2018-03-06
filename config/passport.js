@@ -193,7 +193,7 @@ passport.use('facebook',
   new FacebookStrategy({
     clientID: '503215930079850',
     clientSecret: '36a372af559a0b9f6dba8fdd6de17bf9',
-    callbackURL: 'http://jetintegrationapp.com/auth/facebook/callback',
+    callbackURL: 'http://jetintegrationapp.com:3000/auth/facebook/callback',
     passReqToCallback: true,
     profileFields: ['id', 'email', 'name'],
   },
