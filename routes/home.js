@@ -7,7 +7,7 @@ router.get('/', function (req, res) {
   var domain = req.get('host').match(/\w+/); // e.g., host: "subdomain.website.com"
   
   if (domain) {
-    if (!req.user && (domain == 'www' || domain == 'localhost' || domain == 'evening-forest-79351.herokuapp.com')) {
+    if (!req.user && (domain == 'www' || domain == 'localhost' || domain == 'jetintegrationapp.com')) {
       // if main domain
       res.render('index');
     } else {
@@ -60,7 +60,7 @@ router.post('/', function (req, res, next) {
   
     if (domain) {
       var subdomain = domain[0]; // Use "subdomain"
-      if (req.user || (subdomain != 'www' && subdomain != 'localhost' && domain != 'evening-forest-79351.herokuapp.com')) {
+      if (req.user || (subdomain != 'www' && subdomain != 'localhost' && domain != 'jetintegrationapp.com')) {
         User.findOne({ username: subdomain }, function (err, user) {
           if (!err && user) {
             // create new message
@@ -93,7 +93,7 @@ router.post('/', function (req, res, next) {
 
     if (domain) {
       var subdomain = domain[0]; // Use "subdomain"
-      if (req.user || (subdomain != 'www' && subdomain != 'localhost' && domain != 'evening-forest-79351.herokuapp.com')) {
+      if (req.user || (subdomain != 'www' && subdomain != 'localhost' && domain != 'jetintegrationapp.com')) {
         Message.findOneAndRemove({ _id: messageId, username: subdomain }, function (err, message) {
           if (err) return res.json({ success: false, message: err });
           if (!message) return res.json({ success: false, message: "No data found to delete" });

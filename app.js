@@ -81,7 +81,7 @@ function isAuthenticated(req, res, next) {
 }
 
 // Start Server
-var server = app.listen(process.env.PORT || 3000, function () {
+var server = app.listen(process.env.PORT || 80, function () {
   var port = server.address().port;
   console.log("Express is working on port " + port);
 });
