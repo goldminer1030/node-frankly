@@ -60,6 +60,17 @@ app.use('/login', require('./routes/login'));
 app.use('/reset_password', require('./routes/reset_password'));
 app.use('/register', require('./routes/register'));
 
+// send to facebook to do the authentication
+app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['public_profile', 'email'] }));
+
+// handle the callback after facebook has authenticated the user
+app.get('/auth/facebook/callback',
+  passport.authenticate('facebook', {
+    successRedirect: '/profile',
+    failureRedirect: '/'
+  })
+);
+
 function isAuthenticated(req, res, next) {
   if (req.user) {
     return true;
