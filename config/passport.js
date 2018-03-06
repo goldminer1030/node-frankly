@@ -195,6 +195,7 @@ passport.use('facebook',
     clientSecret: '36a372af559a0b9f6dba8fdd6de17bf9',
     callbackURL: 'https://evening-forest-79351.herokuapp.com/auth/facebook/callback',
     passReqToCallback: true,
+    profileFields: ['id', 'email', 'name'],
   },
   function (req, accessToken, refreshToken, profile, done) {
     // asynchronous
@@ -203,7 +204,6 @@ passport.use('facebook',
       // check if the user is already logged in
       if (!req.user) {
 
-        console.log(profile.email);
         User.findOne({ 'email': email }, function (err, user) {
           if (err)
             return done(err);

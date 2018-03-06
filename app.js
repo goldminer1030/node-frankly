@@ -62,7 +62,7 @@ app.use('/reset_password', require('./routes/reset_password'));
 app.use('/register', require('./routes/register'));
 
 // send to facebook to do the authentication
-app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['public_profile', 'email'] }));
+app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email'] }));
 
 // handle the callback after facebook has authenticated the user
 app.get('/auth/facebook/callback',
