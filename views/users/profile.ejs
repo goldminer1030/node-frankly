@@ -43,6 +43,7 @@
   <p id="messages"></p>
   <h1 class="light last-message" style="margin-top: 40px;">Latest messages</h1>
   <hr class="main-hr" style="margin-bottom: 10px;">
+  <% if (messages) { %>
   <% messages.forEach(function(message){ %>
   <div class="alert alert-info alert-dismissible message-alert" role="alert" data-id="<%= message._id %>">
     <button type="button" class="close" data-dismiss="alert">
@@ -57,6 +58,7 @@
     </div>
   </div>
   <% }) %>
+  <% } %>
 </div>
 <script>
   $(document).ready(function () {
