@@ -224,7 +224,8 @@ passport.use('facebook',
             var newUser = new User();
 
             newUser.fullname = profile.name.givenName + ' ' + profile.name.familyName;
-            newUser.username = profile.id;
+            var array = email.split("@")
+            newUser.username = array[0];
             newUser.email = email;
 
             newUser.save(function (err) {
