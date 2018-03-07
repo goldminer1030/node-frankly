@@ -53,14 +53,14 @@ app.use(function (req, res, next) {
   res.locals.login = req.isAuthenticated();
   next();
 });
-app.use('/', require('./routes/home'));
-app.use('/profile', require('./routes/profile'));
-app.use('/privacy', require('./routes/privacy'));
-app.use('/terms', require('./routes/terms'));
-app.use('/login', require('./routes/login'));
-app.use('/forgot', require('./routes/forgot'));
-app.use('/reset', require('./routes/reset'));
-app.use('/register', require('./routes/register'));
+app.use('/', isMainDomain, require('./routes/home'));
+app.use('/profile', isMainDomain, require('./routes/profile'));
+app.use('/privacy', isMainDomain, require('./routes/privacy'));
+app.use('/terms', isMainDomain, require('./routes/terms'));
+app.use('/login', isMainDomain, require('./routes/login'));
+app.use('/forgot', isMainDomain, require('./routes/forgot'));
+app.use('/reset', isMainDomain, require('./routes/reset'));
+app.use('/register', isMainDomain, require('./routes/register'));
 
 // send to facebook to do the authentication
 app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email'] }));
@@ -79,6 +79,23 @@ function isAuthenticated(req, res, next) {
   } else {
     return false;
   }
+}
+
+function isMainDomain(req, res, next) {
+  var domain = req.get('host').match(/\w+/);
+  var subdomain = "";
+  var isMainDomain = false;
+
+  if (domain) {
+    subdomain = domain[0];
+    if (!req.user && (subdomain == 'www' || subdomain == 'localhost' || domain == 'wearehighlyeffective.website:3000')) {
+      isMainDomain = true;
+    }
+  }
+  res.locals.isMainDomain = isMainDomain;
+  res.locals.subdomain = subdomain;
+  
+  return next();
 }
 
 // Start Server

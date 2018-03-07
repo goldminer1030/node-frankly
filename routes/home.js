@@ -4,8 +4,8 @@ var User = require('../models/User');
 var Message = require('../models/Message');
 
 router.get('/', function (req, res) {
-  var domain = req.headers.host; // e.g., host: "subdomain.website.com"
-  console.log("domain", domain);
+  var domain = req.get('host').match(/\w+/); // e.g., host: "subdomain.website.com"
+  
   if (domain) {
     if (!req.user && (domain == 'www' || domain == 'localhost' || domain == 'wearehighlyeffective.website')) {
       // if main domain
@@ -13,7 +13,7 @@ router.get('/', function (req, res) {
     } else {
       var subdomain = domain[0]; // Use "subdomain"
       var loggedIn = false;
-      console.log("subdomain", subdomain);
+      
       if(req.user) {
         subdomain = req.user.username;
         loggedIn = true;
@@ -64,7 +64,7 @@ router.post('/', function (req, res, next) {
 
   if(type == 'send-msg') {
     // SEND MESSAGE ==============================
-    var domain = req.headers.host; // e.g., host: "subdomain.website.com"
+    var domain = req.get('host').match(/\w+/); // e.g., host: "subdomain.website.com"
     var message = req.body.textmessage;
   
     if (domain) {
@@ -99,7 +99,7 @@ router.post('/', function (req, res, next) {
   } else if (type == 'delete-msg') {
     // DELETE MESSAGE ==============================
     var messageId = req.body.id || req.query.id;
-    var domain = req.headers.host; // e.g., host: "subdomain.website.com"
+    var domain = req.get('host').match(/\w+/); // e.g., host: "subdomain.website.com"
 
     if (domain) {
       var subdomain = domain[0]; // Use "subdomain"
