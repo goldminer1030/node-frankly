@@ -58,7 +58,8 @@ app.use('/profile', require('./routes/profile'));
 app.use('/privacy', require('./routes/privacy'));
 app.use('/terms', require('./routes/terms'));
 app.use('/login', require('./routes/login'));
-app.use('/reset_password', require('./routes/reset_password'));
+app.use('/forgot', require('./routes/forgot'));
+app.use('/reset', require('./routes/reset'));
 app.use('/register', require('./routes/register'));
 
 // send to facebook to do the authentication
