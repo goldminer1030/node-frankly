@@ -2,6 +2,7 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
 var User = require('../models/User');
+var path = require('path');
 var fs = require('fs');
 
 passport.serializeUser(function (user, done) {
@@ -114,8 +115,9 @@ passport.use('local-register',
   
               /** The original name of the uploaded file
                   stored in the variable "originalname". **/
-              var target_path = 'public/uploads/' + req.file.originalname;
-              var real_path = '/uploads/' + req.file.originalname;
+              var file_name = Date.now() + path.extname(req.file.originalname);
+              var target_path = 'public/uploads/' + file_name;
+              var real_path = '/uploads/' + file_name;
   
               /** A better way to copy the uploaded file. **/
               var src = fs.createReadStream(tmp_path);

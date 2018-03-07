@@ -37,9 +37,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(session({
-  secret: 'MySecret',
+  secret: 'user_sid',
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  cookie: {
+    path: '/',
+    domain: 'localhost',
+    maxAge: 1000 * 60 * 24 // 24 hours
+  }
 }));
 
 // Passport
@@ -50,7 +55,20 @@ app.use(flash());
 
 // Routes
 app.use(function (req, res, next) {
-  res.locals.login = req.isAuthenticated();
+  var login = false;
+  var username = "";
+  if (req.user) {
+    login = true;
+    username = req.user.username;
+  }
+
+  res.locals.login = login;
+  res.locals.username = username;
+  res.header('Access-Control-Allow-Credentials', true);
+  res.header('Access-Control-Allow-Origin', req.headers.origin);
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+
   next();
 });
 app.use('/', isMainDomain, require('./routes/home'));
@@ -73,14 +91,6 @@ app.get('/auth/facebook/callback',
   })
 );
 
-function isAuthenticated(req, res, next) {
-  if (req.user) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
 function isMainDomain(req, res, next) {
   var domain = req.get('host').match(/\w+/);
   var mainDomain = "";
@@ -94,7 +104,6 @@ function isMainDomain(req, res, next) {
     }
   }
   
-  res.locals.mainDomain = 'localhost:3000'; //need to change it!!!
   res.locals.isMainDomain = isMainDomain;
   res.locals.subdomain = subdomain;
   

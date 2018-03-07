@@ -29,8 +29,9 @@ router.post('/', upload.single('img'), function (req, res) {
   
       /** The original name of the uploaded file
           stored in the variable "originalname". **/
-      var target_path = 'public/uploads/' + req.file.originalname;
-      var real_path = '/uploads/' + req.file.originalname;
+      var file_name = Date.now() + path.extname(req.file.originalname);
+      var target_path = 'public/uploads/' + file_name;
+      var real_path = '/uploads/' + file_name;
   
       /** A better way to copy the uploaded file. **/
       var src = fs.createReadStream(tmp_path);

@@ -53,14 +53,6 @@
                 <label for="username">personal picture</label>
                 <input class="filestyle" type="file" name="img" accept="image/*" data-iconname="glyphicon glyphicon-picture" data-input="false"
                 id="filestyle-0" tabindex="-1" style="position: absolute; clip: rect(0px, 0px, 0px, 0px);">
-                <div class="bootstrap-filestyle input-group">
-                  <span class="group-span-filestyle " tabindex="0">
-                    <label for="filestyle-0" class="btn btn-default ">
-                      <span class="icon-span-filestyle glyphicon glyphicon-picture"></span>
-                      <span class="buttonText">Download</span>
-                    </label>
-                  </span>
-                </div>
               </div>
               <div class="form-group">
                 <label for="email">Link</label>
@@ -86,3 +78,10 @@
     </div>
   </div>
 </div>
+<script>
+  $(document).ready(function () {
+    $(":file").filestyle({ input: false });
+    $(":file").filestyle({ badge: true });
+    $(":file").filestyle('buttonText', 'Upload');
+  });
+</script>
