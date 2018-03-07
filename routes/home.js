@@ -84,6 +84,7 @@ router.post('/', function (req, res, next) {
               
               res.render('users/message', {
                 user: user,
+                loggedIn: true,
                 isReSend: true,
                 success: isSuccess,
                 message: message
