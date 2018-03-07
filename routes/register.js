@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var passport = require('../config/passport.js');
 var multer = require('multer');
-var path = require('path');
 var upload = multer({ dest: 'uploads/' });
 
 router.get('/', function (req, res) {

@@ -12,22 +12,30 @@ router.get('/', function (req, res) {
       res.render('index');
     } else {
       var subdomain = domain[0]; // Use "subdomain"
+      var loggedIn = false;
       console.log("subdomain", subdomain);
       if(req.user) {
         subdomain = req.user.username;
+        loggedIn = true;
       }
       User.findOne({ username: subdomain }, function (err, user) {
         if (!err && user) {
           if (req.user && subdomain == req.user.username) {
             Message.find({ username: subdomain }, function (err, message) {
               if (!err && message) {
-                res.render('users/profile', {
+                res.render('users/message', {
                   user: req.user,
+                  loggedIn: loggedIn,
+                  isReSend: false,
+                  success: false,
                   messages: message
                 });
               } else {
-                res.render('users/profile', {
+                res.render('users/message', {
                   user: req.user,
+                  loggedIn: loggedIn,
+                  isReSend: false,
+                  success: false,
                   messages: null
                 });
               }
@@ -35,6 +43,7 @@ router.get('/', function (req, res) {
           } else {
             res.render('users/message', {
               user: user,
+              loggedIn: loggedIn,
               isReSend: false,
               success: false,
               message: ''

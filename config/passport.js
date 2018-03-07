@@ -100,7 +100,7 @@ passport.use('local-register',
             });
           } else {
 
-            if (req.file.path) {
+            if (req.file) {
               var tmp_path = req.file.path;
   
               /** The original name of the uploaded file

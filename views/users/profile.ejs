@@ -1,80 +1,76 @@
 <div class="container-fluid profile-header">
   <div class="row">
-
     <% if (user.picture) { %>
       <div class="avatar fitbg" style="background:url(<%= user.picture %>)"></div>
     <% } else { %>
       <div class="avatar fitbg" style="background:url(/img/default.gif)"></div>
     <% } %>
-
-    <% if (user.fullname) { %>
-    <h1 class="light username fr">
-      <%= user.fullname %>
-    </h1>
-    <a class="editprofile" href="/profile">
-      <i class="ion-gear-a"></i>Change settings</a>
-    <% } %>
+    <div class="form-container container">
+      <div class="row">
+        <div class="register" style="max-width: 150px; margin: 0 auto;">
+          <form action="/profile" enctype="multipart/form-data" method="post" accept-charset="utf-8">
+            <input style="width: 0px; position: absolute; clip: rect(0px, 0px, 0px, 0px);" name="img" id="filestyle-0" tabindex="-1"
+              type="file">
+            <div class="bootstrap-filestyle input-group">
+              <span class="group-span-filestyle " tabindex="0">
+                <label for="filestyle-0" class="btn btn-default ">
+                  <span class="icon-span-filestyle glyphicon glyphicon-folder-open"></span>
+                  <span class="buttonText">Download</span>
+                </label>
+              </span>
+            </div>
+            <input name="send_img" value="change photo" class="btnsubmit light" style="margin: 0!important;" type="submit">
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <div class="container-fluid">
-  <div class="row profile-content">
-    <p>Publish your page
-      <br>Discover the truth from your friends</p>
-    <% if (user.username) { %>
-    <div class="share-box col-xs-12">
-      <div class="col-xs-6">
-        <a target="_blank" href="https://twitter.com/home?status=http://<%= user.username %>.wearehighlyeffective.website:3000" class="share-social social-twitter">
-          <i class="icon ion-social-twitter"></i>On Twitter</a>
+  <div class="row">
+    <% if ( error.length > 0 ) { %>
+      <div class="col-md-12">
+        <div class="alert alert-danger alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">×</span>
+            <span class="sr-only">Close</span>
+          </button>
+          <p>
+            <%= error %>
+          </p>
+        </div>
       </div>
-      <div class="col-xs-6">
-        <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://<%= user.username %>.wearehighlyeffective.website:3000" class="share-social social-fb">
-          <i class="icon ion-social-facebook"></i>On Facebook</a>
-      </div>
-    </div>
-    <div class="input-group">
-      <span type="text" id="copybtn" class="js-textareacopybtn js-copytextarea fr">http://<%= user.username %>.wearehighlyeffective.website:3000</span>
-      <span id="copythis" class="hidden">http://<%= user.username %>.wearehighlyeffective.website:3000</span>
-      <span class="input-group-addon light js-textareacopybtn" id="link" style="cursor: pointer;right: 0px; height: 34px; border: 1px solid #f1f5f9; font-size:15px">
-        <i class="fa fa-link" aria-hidden="true"></i>
-      </span>
-    </div>
     <% } %>
-  </div>
-  <p id="messages"></p>
-  <h1 class="light last-message" style="margin-top: 40px;">Latest messages</h1>
-  <hr class="main-hr" style="margin-bottom: 10px;">
-  <% if (messages) { %>
-  <% messages.forEach(function(message){ %>
-  <div class="alert alert-info alert-dismissible message-alert" role="alert" data-id="<%= message._id %>">
-    <button type="button" class="close" data-dismiss="alert">
-      <span aria-hidden="true">×</span>
-      <span class="sr-only">Close</span>
-    </button>
-    <span class="messagespan fr"><%= message.content %></span>
-    <div class="info">
-      <span class="pull-left fr"><%= message.createdAt %></span>
-      <span class="pull-right" style="color: #07897F">
-        <i class="fa fa-user-circle-o" aria-hidden="true"></i>Anonymous</span>
+    <div class="col-md-12 form-box">
+      <p style="font-size: 25px; text-align: center; margin-top: 30px;">Modify the data</p>
+      <div class="form-container container">
+        <div class="row">
+          <div class="register">
+            <form action="/profile" method="post" accept-charset="utf-8">
+              <label>Full name</label>
+              <% if (user.fullname) { %>
+                <input name="fullname" value="<%= user.fullname %>" type="text" required>
+              <% } else { %>
+                <input name="fullname" value="" type="text" required>
+              <% } %>
+              <label>E-mail</label>
+              <% if (user.email) { %>
+                <input readonly="" disabled="" style="background:#d4d4d4" value="<%= user.email %>" type="email">
+              <% } else { %>
+                <input readonly="" disabled="" style="background:#d4d4d4" value="" type="email">
+              <% } %>
+              <br>
+              <span style="color: red;">You can not change e-mail</span>
+              <label>Current password</label>
+              <input value="" name="currentPassword" type="password" required>
+              <label>New password</label>
+              <input value="" name="newPassword" type="password" required>
+              <input name="send" value="Modification" class="btnsubmit light" type="submit">
+              <a href="/logout" style="display: block; margin: 20px auto; padding-top: 8px;background: #989898;" class="btnsubmit light">Sign out</a>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <% }) %>
-  <% } %>
 </div>
-<script>
-  $(document).ready(function () {
-    $(".message-alert").on("closed.bs.alert", function (event) {
-      var _that = $(this);
-      event.preventDefault();
-      console.log("done");
-      $.ajax({
-        type: "POST",
-        url: "/",
-        dataType: "json",
-        data: {
-          type: 'delete-msg',
-          id: $(_that).data("id")
-        },
-      });
-    });
-  });
-</script>
