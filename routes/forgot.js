@@ -4,6 +4,8 @@ var async = require('async');
 var nodemailer = require('nodemailer');
 var User = require('../models/User');
 var crypto = require('crypto');
+var crypt = require('../config/crypt.js');
+const encryptedPassword = '0c79bcc929ff8768c9f69a3f1ac8';
 
 router.get('/', function (req, res) {
   res.render('users/forgot');
@@ -34,10 +36,10 @@ router.post('/', function (req, res, next) {
     },
     function (token, user, done) {
       var smtpTransport = nodemailer.createTransport({
-        service: 'SendGrid',
+        service: 'Gmail',
         auth: {
-          user: 'goldminer1030',
-          pass: 'greenpeace1988'
+          user: 'goldminer1030@gmail.com',
+          pass: crypt.decrypt(encryptedPassword),
         }
       });
       var mailOptions = {

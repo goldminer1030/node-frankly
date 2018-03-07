@@ -3,6 +3,8 @@ var router = express.Router();
 var async = require('async');
 var User = require('../models/User');
 var nodemailer = require('nodemailer');
+var crypt = require('../config/crypt.js');
+const encryptedPassword = '0c79bcc929ff8768c9f69a3f1ac8';
 
 router.get('/:token', function (req, res) {
   User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function (err, user) {
@@ -16,7 +18,7 @@ router.get('/:token', function (req, res) {
   });
 });
 
-router.post('/reset/:token', function (req, res) {
+router.post('/:token', function (req, res) {
   async.waterfall([
     function (done) {
       User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function (err, user) {
@@ -38,10 +40,10 @@ router.post('/reset/:token', function (req, res) {
     },
     function (user, done) {
       var smtpTransport = nodemailer.createTransport({
-        service: 'SendGrid',
+        service: 'Gmail',
         auth: {
-          user: 'goldminer1030',
-          pass: 'greenpeace1988'
+          user: 'goldminer1030@gmail.com',
+          pass: crypt.decrypt(encryptedPassword),
         }
       });
       var mailOptions = {
