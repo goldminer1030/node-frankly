@@ -22,37 +22,41 @@ router.get('/', function (req, res) {
 router.post('/', upload.single('img'), function (req, res) {
   if (!req.user) res.redirect('/');
 
-  if (req.file) {
-    // image upload
-    var tmp_path = req.file.path;
-
-    /** The original name of the uploaded file
-        stored in the variable "originalname". **/
-    var target_path = 'public/uploads/' + req.file.originalname;
-    var real_path = '/uploads/' + req.file.originalname;
-
-    /** A better way to copy the uploaded file. **/
-    var src = fs.createReadStream(tmp_path);
-    var dest = fs.createWriteStream(target_path);
-    src.pipe(dest);
-    src.on('error', function (err) { return res.json({ success: "false", message: error }); });
-    src.on('end', function () {
-      // update user
-      var user = req.user;
-      user.picture = real_path;
-      user.save(function (err) {
-        if (err) {
-          res.render('users/profile', {
-            user: req.user,
-            error: "An error occured while updating picture, please try again"
-          });
-        }
-
-        res.redirect('/');
+  if (req.body.send == 'change_photo') {
+    if (req.file) {
+      // image upload
+      var tmp_path = req.file.path;
+  
+      /** The original name of the uploaded file
+          stored in the variable "originalname". **/
+      var target_path = 'public/uploads/' + req.file.originalname;
+      var real_path = '/uploads/' + req.file.originalname;
+  
+      /** A better way to copy the uploaded file. **/
+      var src = fs.createReadStream(tmp_path);
+      var dest = fs.createWriteStream(target_path);
+      src.pipe(dest);
+      src.on('error', function (err) { return res.json({ success: "false", message: error }); });
+      src.on('end', function () {
+        // update user
+        var user = req.user;
+        user.picture = real_path;
+        user.save(function (err) {
+          if (err) {
+            res.render('users/profile', {
+              user: req.user,
+              error: "An error occured while updating picture, please try again"
+            });
+          }
+  
+          res.redirect('back');
+        });
       });
-    });
-    
-  } else {
+    } else {
+      // empty file
+      res.redirect('back');
+    }
+  } else if (req.body.send == 'change_info') {
     var current_user = req.user;
     if (current_user.authenticate(req.body.currentPassword)) {
       var user = current_user;
