@@ -64,11 +64,20 @@ passport.use('local-register',
       var password_confirm = req.body.password_confirm;
       var username = req.body.username;
 
+      // password  doesn't match
       if(password != password_confirm) {
         return done(null, false, {
           message: "Password does't match"
         });
       }
+
+    // username has special characters
+    var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+    if (format.test(username)) {
+      return done(null, false, {
+        message: "User name is not allowed to contain special characters and spaces."
+      });
+    }
       
     // asynchronous
     process.nextTick(function () {
@@ -121,14 +130,11 @@ passport.use('local-register',
                 newUser.email = email;
                 newUser.password = password;
                 newUser.picture = real_path;
-                newUser.username = req.body.username;
+                newUser.username = req.body.username.toLowerCase().replace(/\s/g, '');;
   
                 newUser.save(function (err) {
-                  if (err)
-                    return done(err);
-  
-                  return done(null, newUser, {
-                    message: "Thank you for registration!"
+                  req.logIn(newUser, function (err) {
+                    done(err, newUser);
                   });
                 });
               });
@@ -140,14 +146,11 @@ passport.use('local-register',
               newUser.email = email;
               newUser.password = password;
               newUser.picture = null;
-              newUser.username = req.body.username;
+              newUser.username = req.body.username.toLowerCase().replace(/\s/g, '');;
   
               newUser.save(function (err) {
-                if (err)
-                  return done(err);
-  
-                return done(null, newUser, {
-                  message: "Thank you for registration!"
+                req.logIn(newUser, function (err) {
+                  done(err, newUser);
                 });
               });
             }
@@ -171,11 +174,8 @@ passport.use('local-register',
             user.email = email;
             user.password = password;
             user.save(function (err) {
-              if (err)
-                return done(err);
-
-              return done(null, user, {
-                message: "Thank you for registration!"
+              req.logIn(user, function (err) {
+                done(err, user);
               });
             });
           }
