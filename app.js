@@ -105,6 +105,8 @@ function isMainDomain(req, res, next) {
   }
   
   console.log('domain', domain);
+  console.log('subdomain', subdomain);
+  console.log('isMainDomain', isMainDomain);
   res.locals.isMainDomain = isMainDomain;
   res.locals.subdomain = subdomain;
   
