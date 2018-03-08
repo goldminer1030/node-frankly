@@ -15,7 +15,7 @@ router.get('/', function (req, res) {
       subdomain = req.user.username;
       loggedIn = true;
     }
-    console.log('req.user', req.user);
+    
     User.findOne({ username: subdomain }, function (err, user) {
       if (!err && user) {
         if (req.user && subdomain == req.user.username) {

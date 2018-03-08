@@ -9,6 +9,8 @@ var session = require('express-session');
 var flash = require('express-flash');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
+var Redis = require('ioredis');
+var redis = new Redis(6379, '213.32.13.188');
 
 var app = express();
 
@@ -52,21 +54,48 @@ app.use(flash());
 app.use(function (req, res, next) {
   var login = false;
   var username = "";
+  var domain = req.get('host').match(/\w+/);
+  var mainDomain = "";
+  var subdomain = "";
+  var isMainDomain = false;
+
+  if (domain) {
+    subdomain = domain[0];
+    if (!req.user && (subdomain == 'www' || subdomain == 'localhost' || subdomain == 'wearehighlyeffective')) {
+      isMainDomain = true;
+    }
+  }
+
   if (req.user) {
     login = true;
     username = req.user.username;
-  }
 
+    redis.set("username", username, function (err) {
+      if (err) {
+        // Something went wrong
+        console.error("error");
+      } else {
+        redis.get("username", function (err, value) {
+          if (err) {
+            console.error("error");
+          } else {
+            console.log("Worked: " + value);
+          }
+        });
+      }
+    });
+  }
+  
+  res.locals.isMainDomain = isMainDomain;
+  res.locals.subdomain = subdomain;
   res.locals.login = login;
   res.locals.username = username;
-  res.header('Access-Control-Allow-Credentials', true);
-  res.header('Access-Control-Allow-Origin', req.headers.origin);
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
+  req.redis = redis;
 
   next();
 });
-app.use('/', isMainDomain, require('./routes/home'));
+
+app.use('/', require('./routes/home'));
 app.use('/profile', require('./routes/profile'));
 app.use('/privacy', require('./routes/privacy'));
 app.use('/terms', require('./routes/terms'));
@@ -85,27 +114,6 @@ app.get('/auth/facebook/callback',
     failureRedirect: '/'
   })
 );
-
-function isMainDomain(req, res, next) {
-  var domain = req.get('host').match(/\w+/);
-  var mainDomain = "";
-  var subdomain = "";
-  var isMainDomain = false;
-
-  if (domain) {
-    subdomain = domain[0];
-    if (!req.user && (subdomain == 'www' || subdomain == 'localhost' || subdomain == 'wearehighlyeffective')) {
-      isMainDomain = true;
-    }
-  }
-  
-  console.log('subdomain', subdomain);
-  console.log('isMainDomain', isMainDomain);
-  res.locals.isMainDomain = isMainDomain;
-  res.locals.subdomain = subdomain;
-  
-  return next();
-}
 
 // Start Server
 var server = app.listen(process.env.PORT || 3000, function () {
