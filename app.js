@@ -10,7 +10,7 @@ var flash = require('express-flash');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var Redis = require('ioredis');
-var redis = new Redis(6379, '213.32.13.188');
+var redis = new Redis(6379, '127.0.0.1');
 
 var app = express();
 
