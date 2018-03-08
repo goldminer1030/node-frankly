@@ -39,12 +39,7 @@ app.use(cookieParser());
 app.use(session({
   secret: 'user_sid',
   resave: false,
-  saveUninitialized: true,
-  cookie: {
-    path: '/',
-    domain: 'localhost',
-    maxAge: 1000 * 60 * 24 // 24 hours
-  }
+  saveUninitialized: true
 }));
 
 // Passport
