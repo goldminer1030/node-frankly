@@ -4,7 +4,6 @@ var User = require('../models/User');
 var Message = require('../models/Message');
 
 router.get('/', function (req, res) {
-  console.log('req.user', req.user);
   if (!req.user && res.locals.isMainDomain) {
     // if main domain
     res.render('index');
@@ -16,7 +15,7 @@ router.get('/', function (req, res) {
       subdomain = req.user.username;
       loggedIn = true;
     }
-    console.log('subdomain', req.user.username);
+    console.log('subdomain', subdomain);
     User.findOne({ username: subdomain }, function (err, user) {
       if (!err && user) {
         if (req.user && subdomain == req.user.username) {
