@@ -26,13 +26,19 @@ passport.use('local-login',
     if (email)
       email = email.toLowerCase(); // Use lower-case e-mails to avoid case-sensitive e-mail matching
 
+    console.log('login-req', req);
+    console.log('login-email', email);
+    console.log('login-password', password);
     // asynchronous
     process.nextTick(function () {
       User.findOne({ 'email': email }, function (err, user) {
+        console.log('findOne start');
         // if there are any errors, return the error
         if (err)
           return done(err);
-
+        
+        console.log('findOne');
+        
         // if no user is found, return the message
         if (!user)
           return done(null, false, {
