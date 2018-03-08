@@ -99,12 +99,11 @@ function isMainDomain(req, res, next) {
 
   if (domain) {
     subdomain = domain[0];
-    if (!req.user && (subdomain == 'www' || subdomain == 'localhost' || domain == 'wearehighlyeffective.website:3000')) {
+    if (!req.user && (subdomain == 'www' || subdomain == 'localhost' || subdomain == 'wearehighlyeffective')) {
       isMainDomain = true;
     }
   }
   
-  console.log('domain', domain);
   console.log('subdomain', subdomain);
   console.log('isMainDomain', isMainDomain);
   res.locals.isMainDomain = isMainDomain;
