@@ -12,7 +12,7 @@ router.get('/', function (req, res) {
   console.log('res.locals.username', res.locals.username);
   console.log('subdomain', subdomain);
   console.log('loggedIn', loggedIn);
-
+  
   if (res.locals.isMainDomain && !loggedIn) {
     // if main domain and not logged in
     res.render('index');
@@ -23,6 +23,7 @@ router.get('/', function (req, res) {
     } else if (!res.locals.isMainDomain && res.locals.username == subdomain) {
       showProfile = true;
     }
+    console.log('showProfile', showProfile);
     
     User.findOne({ username: subdomain }, function (err, user) {
       if (!err && user) {
@@ -52,7 +53,7 @@ router.get('/', function (req, res) {
             loggedIn: loggedIn,
             isReSend: false,
             success: false,
-            message: ''
+            message: null
           });
         }
       } else {
