@@ -8,6 +8,7 @@ router.get('/', function (req, res) {
   var loggedIn = res.locals.login;
   
   console.log('res.locals.isMainDomain', res.locals.isMainDomain);
+  console.log('res.locals.login', res.locals.login);
   console.log('res.locals.userid', res.locals.userid);
   console.log('subdomain', subdomain);
   
