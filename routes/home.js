@@ -6,7 +6,6 @@ var Message = require('../models/Message');
 router.get('/', function (req, res) {
   var subdomain = res.locals.subdomain;
   var loggedIn = res.locals.login;
-  var showProfile = false;
   
   console.log('res.locals.isMainDomain', res.locals.isMainDomain);
   console.log('res.locals.userid', res.locals.userid);
@@ -25,9 +24,7 @@ router.get('/', function (req, res) {
       };
     }
     
-    console.log('showProfile', showProfile);
-    
-    User.findOne({ username: subdomain }, function (err, user) {
+    User.findOne(filter, function (err, user) {
       if (!err && user) {
         console.log('findOne - user id: ', user._id);
         console.log('findOne - res.locals.userid: ', res.locals.userid);
