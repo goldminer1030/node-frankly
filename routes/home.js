@@ -116,13 +116,6 @@ router.post('/', function (req, res, next) {
 // LOGOUT ==============================
 router.get('/logout', function (req, res) {
   req.logout();
-
-  req.redis.set("username", "", function (err) {
-    if (err) {
-      console.error("error logout");
-    }
-  });
-
   res.redirect('/');
 });
 

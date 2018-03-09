@@ -10,8 +10,6 @@ var redisStore = require('connect-redis')(session);
 var flash = require('express-flash');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
-var Redis = require('ioredis');
-var redis = new Redis(6379, '127.0.0.1');
 
 var app = express();
 
@@ -74,43 +72,22 @@ app.use(function (req, res, next) {
     }
   }
 
-  if (req.user) {
-    login = true;
-
-    redis.set("username", req.user.username, function (err) {
-      if (err) {
-        // Something went wrong
-        console.error("error");
-      }
-    });
-  }
-
   console.log('session', req.session);
   res.locals.isMainDomain = isMainDomain;
   res.locals.subdomain = subdomain;
   res.locals.login = login;
   res.locals.username = "";
   res.locals.showProfile = login;
-
-  redis.get("username", function (err, value) {
-    if (err) {
-      console.error("error while getting from req.redis");
-    } else {
-      res.locals.username = value;
+  
+  if (req.session) {
+    if(req.session.passport && req.session.passport.user) {
       res.locals.login = true;
-      
-      if (isMainDomain) {
-        res.locals.showProfile = true;
-      } else {
-        if (subdomain == value) {
-          res.locals.showProfile = true;
-        }
-      }
+      res.locals.username = req.session.passport.user.username;
+      res.locals.showProfile = true;
     }
-    
-    req.redis = redis;
-    next();
-  });
+  }
+
+  next();
 
 });
 
