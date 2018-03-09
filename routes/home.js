@@ -6,7 +6,11 @@ var Message = require('../models/Message');
 router.get('/', function (req, res) {
   var subdomain = res.locals.subdomain;
   var loggedIn = res.locals.login;
-
+  
+  console.log('res.locals.username', res.locals.username);
+  console.log('subdomain', subdomain);
+  console.log('loggedIn', loggedIn);
+  
   if (res.locals.isMainDomain && (!loggedIn || (loggedIn && res.locals.username != subdomain))) {
     // if main domain and not logged in
     res.render('index');
@@ -16,8 +20,6 @@ router.get('/', function (req, res) {
       subdomain = res.locals.username;
     }
     
-    console.log('res.locals.username', res.locals.username);
-    console.log('subdomain', subdomain);
     User.findOne({ username: subdomain }, function (err, user) {
       if (!err && user) {
         if ((req.user && subdomain == req.user.username) || res.locals.username == subdomain) {
