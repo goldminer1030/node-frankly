@@ -67,11 +67,12 @@ app.use(function (req, res, next) {
 
   if (domain) {
     subdomain = domain[0];
-    if (!req.user && (subdomain == 'www' || subdomain == 'localhost' || subdomain == 'wearehighlyeffective')) {
+    if (subdomain == 'www' || subdomain == 'localhost' || subdomain == 'wearehighlyeffective') {
       isMainDomain = true;
     }
   }
 
+  console.log('req.user', req.user);
   console.log('session', req.session);
   res.locals.isMainDomain = isMainDomain;
   res.locals.subdomain = subdomain;
