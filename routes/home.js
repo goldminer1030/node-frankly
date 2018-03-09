@@ -15,6 +15,16 @@ router.get('/', function (req, res) {
       subdomain = req.user.username;
       loggedIn = true;
     }
+
+    req.redis.get("username", function (err, value) {
+      if (err) {
+        console.error("error while getting from req.redis");
+      } else {
+        res.locals.username = value;
+        res.locals.login = true;
+        console.log("redis username: " + res.locals.username);
+      }
+    });
     
     console.log('res.locals.username', res.locals.username);
     console.log('subdomain', subdomain);
