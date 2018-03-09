@@ -5,28 +5,33 @@ var Message = require('../models/Message');
 
 router.get('/', function (req, res) {
   var subdomain = res.locals.subdomain;
-  var showProfile = false;
   var loggedIn = res.locals.login;
+  var showProfile = false;
   
   console.log('res.locals.isMainDomain', res.locals.isMainDomain);
-  console.log('res.locals.username', res.locals.username);
+  console.log('res.locals.userid', res.locals.userid);
   console.log('subdomain', subdomain);
   
   if (res.locals.isMainDomain && !loggedIn) {
     // if main domain and not logged in
     res.render('index');
   } else {
+    var filter = {
+      'username': subdomain
+    };
     if (res.locals.isMainDomain && loggedIn) {
-      subdomain = res.locals.username;
-      showProfile = true;
-    } else if (!res.locals.isMainDomain && res.locals.username == subdomain) {
-      showProfile = true;
+      filter = {
+        '_id': res.locals.userid
+      };
     }
+    
     console.log('showProfile', showProfile);
     
     User.findOne({ username: subdomain }, function (err, user) {
       if (!err && user) {
-        if (showProfile) {
+        console.log('findOne - user id: ', user._id);
+        console.log('findOne - res.locals.userid: ', res.locals.userid);
+        if ((res.locals.isMainDomain && loggedIn) || (!res.locals.isMainDomain && user._id == res.locals.userid)) {
           Message.find({ 'username': subdomain }).sort({ 'createdAt': -1 }).exec(function (err, message) {
             if (!err && message) {
               res.render('users/message', {

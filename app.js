@@ -76,18 +76,14 @@ app.use(function (req, res, next) {
   res.locals.isMainDomain = isMainDomain;
   res.locals.subdomain = subdomain;
   res.locals.login = login;
-  res.locals.username = "";
-  res.locals.showProfile = login;
+  res.locals.userid = "";
   
   if (req.session) {
     console.log('req.session');
     if(req.session.passport && req.session.passport.user) {
       var user = req.session.passport.user;
-      console.log('req.session.passport.user', user);
       res.locals.login = true;
-      res.locals.username = user.username;
-      res.locals.showProfile = true;
-      console.log('res.locals.username ---', res.locals.username);
+      res.locals.userid = req.session.passport.user;
     }
   }
 
