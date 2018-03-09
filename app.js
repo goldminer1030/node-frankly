@@ -40,6 +40,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(session({
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 * 30,
+    domain: '.wearehighlyeffective.website'
+  },
   store: new redisStore({
     host: '127.0.0.1',
     port: 6379
