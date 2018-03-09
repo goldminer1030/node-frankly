@@ -11,7 +11,6 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var Redis = require('ioredis');
 var redis = new Redis(6379, '127.0.0.1');
-var uniqid = require('uniqid');
 
 var app = express();
 
@@ -83,7 +82,6 @@ app.use(function (req, res, next) {
   res.locals.username = "";
   res.locals.showProfile = login;
 
-  console.log('uniqid.process()', uniqid.process());
   redis.get("username", function (err, value) {
     if (err) {
       console.error("error while getting from req.redis");
