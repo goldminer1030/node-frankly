@@ -24,7 +24,7 @@ router.get('/', function (req, res) {
           Message.find({ 'username': subdomain }).sort({ 'createdAt': -1 }).exec(function (err, message) {
             if (!err && message) {
               res.render('users/message', {
-                user: req.user,
+                user: user,
                 loggedIn: loggedIn,
                 isReSend: false,
                 success: false,
@@ -32,7 +32,7 @@ router.get('/', function (req, res) {
               });
             } else {
               res.render('users/message', {
-                user: req.user,
+                user: user,
                 loggedIn: loggedIn,
                 isReSend: false,
                 success: false,
