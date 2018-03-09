@@ -5,7 +5,6 @@ var Message = require('../models/Message');
 
 router.get('/', function (req, res) {
   var subdomain = res.locals.subdomain;
-  var loggedIn = res.locals.login;
   var showProfile = false;
   
   console.log('res.locals.isMainDomain', res.locals.isMainDomain);
@@ -32,7 +31,7 @@ router.get('/', function (req, res) {
             if (!err && message) {
               res.render('users/message', {
                 user: user,
-                loggedIn: loggedIn,
+                loggedIn: true,
                 isReSend: false,
                 success: false,
                 messages: message
@@ -40,7 +39,7 @@ router.get('/', function (req, res) {
             } else {
               res.render('users/message', {
                 user: user,
-                loggedIn: loggedIn,
+                loggedIn: true,
                 isReSend: false,
                 success: false,
                 messages: null
@@ -50,7 +49,7 @@ router.get('/', function (req, res) {
         } else {
           res.render('users/message', {
             user: user,
-            loggedIn: loggedIn,
+            loggedIn: false,
             isReSend: false,
             success: false,
             message: null
