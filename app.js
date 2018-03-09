@@ -82,10 +82,11 @@ app.use(function (req, res, next) {
   if (req.session) {
     console.log('req.session');
     if(req.session.passport && req.session.passport.user) {
-      console.log('req.session.passport');
+      console.log('req.session.passport', req.session.passport.user.username);
       res.locals.login = true;
       res.locals.username = req.session.passport.user.username;
       res.locals.showProfile = true;
+      console.log('res.locals.username ---', res.locals.username);
     }
   }
 
