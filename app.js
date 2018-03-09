@@ -83,7 +83,7 @@ app.use(function (req, res, next) {
       console.error("error while getting from req.redis");
     } else {
       res.locals.username = value;
-      console.log("redis username: " + value);
+      console.log("redis username: " + res.locals.username);
     }
   });
   
