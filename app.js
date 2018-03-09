@@ -53,7 +53,6 @@ app.use(flash());
 // Routes
 app.use(function (req, res, next) {
   var login = false;
-  var username = "";
   var domain = req.get('host').match(/\w+/);
   var mainDomain = "";
   var subdomain = "";
@@ -68,9 +67,8 @@ app.use(function (req, res, next) {
 
   if (req.user) {
     login = true;
-    username = req.user.username;
 
-    redis.set("username", username, function (err) {
+    redis.set("username", req.user.username, function (err) {
       if (err) {
         // Something went wrong
         console.error("error");
@@ -81,10 +79,19 @@ app.use(function (req, res, next) {
   res.locals.isMainDomain = isMainDomain;
   res.locals.subdomain = subdomain;
   res.locals.login = login;
-  
-  req.redis = redis;
 
-  next();
+  redis.get("username", function (err, value) {
+    if (err) {
+      console.error("error while getting from req.redis");
+    } else {
+      res.locals.username = value;
+      res.locals.login = true;
+    }
+    
+    req.redis = redis;
+    next();
+  });
+
 });
 
 app.use('/', require('./routes/home'));
