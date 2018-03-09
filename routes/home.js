@@ -7,12 +7,12 @@ router.get('/', function (req, res) {
   var subdomain = res.locals.subdomain;
   var loggedIn = res.locals.login;
 
-  if (!loggedIn && res.locals.isMainDomain) {
+  if (!loggedIn && res.locals.username != subdomain && res.locals.isMainDomain) {
     // if main domain and not logged in
     res.render('index');
   } else {
     
-    if (loggedIn) {
+    if (loggedIn && res.locals.username == subdomain) {
       subdomain = res.locals.username;
     }
     
