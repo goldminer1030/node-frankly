@@ -74,27 +74,18 @@ app.use(function (req, res, next) {
       if (err) {
         // Something went wrong
         console.error("error");
-      } else {
-        redis.get("username", function (err, value) {
-          if (err) {
-            console.error("error");
-          } else {
-            console.log("Worked: " + value);
-          }
-        });
       }
     });
   }
-  if(req.redis) {
-    req.redis.get("username", function (err, value) {
-      if (err) {
-        console.error("error while getting from req.redis");
-      } else {
-        res.locals.username = value;
-        console.log("req.redis username: " + value);
-      }
-    });
-  }
+
+  redis.get("username", function (err, value) {
+    if (err) {
+      console.error("error while getting from req.redis");
+    } else {
+      res.locals.username = value;
+      console.log("redis username: " + value);
+    }
+  });
   
   res.locals.isMainDomain = isMainDomain;
   res.locals.subdomain = subdomain;
