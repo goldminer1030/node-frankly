@@ -6,6 +6,7 @@ var Message = require('../models/Message');
 router.get('/', function (req, res) {
   var subdomain = res.locals.subdomain;
   var showProfile = false;
+  var loggedIn = res.locals.login;
   
   console.log('res.locals.isMainDomain', res.locals.isMainDomain);
   console.log('res.locals.username', res.locals.username);
