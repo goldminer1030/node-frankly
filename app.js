@@ -78,18 +78,19 @@ app.use(function (req, res, next) {
     });
   }
 
+  res.locals.isMainDomain = isMainDomain;
+  res.locals.subdomain = subdomain;
+
   redis.get("username", function (err, value) {
     if (err) {
       console.error("error while getting from req.redis");
     } else {
       res.locals.username = value;
+      res.locals.login = true;
       console.log("redis username: " + res.locals.username);
     }
   });
   
-  res.locals.isMainDomain = isMainDomain;
-  res.locals.subdomain = subdomain;
-  res.locals.login = login;
   
   req.redis = redis;
 
