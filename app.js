@@ -80,6 +80,7 @@ app.use(function (req, res, next) {
   res.locals.subdomain = subdomain;
   res.locals.login = login;
   res.locals.username = "";
+  res.locals.showProfile = login;
 
   redis.get("username", function (err, value) {
     if (err) {
@@ -87,6 +88,14 @@ app.use(function (req, res, next) {
     } else {
       res.locals.username = value;
       res.locals.login = true;
+      
+      if (isMainDomain) {
+        res.locals.showProfile = true;
+      } else {
+        if (subdomain == value) {
+          res.locals.showProfile = true;
+        }
+      }
     }
     
     req.redis = redis;
