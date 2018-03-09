@@ -79,7 +79,6 @@ app.use(function (req, res, next) {
   res.locals.userid = "";
   
   if (req.session) {
-    console.log('req.session');
     if(req.session.passport && req.session.passport.user) {
       var user = req.session.passport.user;
       res.locals.login = true;

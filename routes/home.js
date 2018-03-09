@@ -24,7 +24,7 @@ router.get('/', function (req, res) {
         '_id': res.locals.userid
       };
     }
-    
+    console.log('filter', filter);
     User.findOne(filter, function (err, user) {
       if (!err && user) {
         console.log('findOne - user id: ', user._id);
