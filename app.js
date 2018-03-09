@@ -80,7 +80,9 @@ app.use(function (req, res, next) {
   res.locals.showProfile = login;
   
   if (req.session) {
+    console.log('req.session');
     if(req.session.passport && req.session.passport.user) {
+      console.log('req.session.passport');
       res.locals.login = true;
       res.locals.username = req.session.passport.user.username;
       res.locals.showProfile = true;
