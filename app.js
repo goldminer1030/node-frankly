@@ -11,6 +11,19 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var Redis = require('ioredis');
 var redis = new Redis(6379, '127.0.0.1');
+const connectRedis = require('connect-redis');
+const RedisStore = connectRedis(session);
+const sess = {
+  resave: false,
+  saveUninitialized: false,
+  name: 'user_sid',
+  cookie: {
+    httpOnly: true,
+    secure: false,
+  },
+  store: new RedisStore({ url: '127.0.0.1', logErrors: true }),
+};
+
 
 var app = express();
 
@@ -38,11 +51,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(session({
-  secret: 'user_sid',
-  resave: false,
-  saveUninitialized: true
-}));
+app.use(session(sess));
 
 // Passport
 var passport = require('./config/passport');
@@ -75,6 +84,8 @@ app.use(function (req, res, next) {
       }
     });
   }
+
+  console.log('req.session', req.session);
 
   res.locals.isMainDomain = isMainDomain;
   res.locals.subdomain = subdomain;
