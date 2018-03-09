@@ -5,25 +5,13 @@ var express = require('express');
 var expressLayouts = require('express-ejs-layouts');
 var path = require('path');
 var mongoose = require('mongoose');
-var session = require('client-sessions');
+var session = require('express-session');
+var redisStore = require('connect-redis')(session);
 var flash = require('express-flash');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
-var Redis = require('ioredis');
-var redis = new Redis(6379, '127.0.0.1');
-const connectRedis = require('connect-redis');
-const RedisStore = connectRedis(session);
-const sess = {
-  resave: false,
-  saveUninitialized: false,
-  name: 'user_sid',
-  cookie: {
-    httpOnly: true,
-    secure: false,
-  },
-  store: new RedisStore({ url: '127.0.0.1', logErrors: true }),
-};
-
+var redis = require('redis');
+var client = redis.createClient();
 
 var app = express();
 
@@ -51,7 +39,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(session(sess));
+app.use(session({
+  secret: 'ssshhhhh',
+  // create new redis store.
+  store: new redisStore({ host: '127.0.0.1', port: 6379, client: client, ttl: 260 }),
+  saveUninitialized: false,
+  resave: false
+}));
 
 // Passport
 var passport = require('./config/passport');
@@ -75,14 +69,15 @@ app.use(function (req, res, next) {
   }
 
   if (req.user) {
+    req.session.username = req.user.username;
     login = true;
 
-    redis.set("username", req.user.username, function (err) {
-      if (err) {
-        // Something went wrong
-        console.error("error");
-      }
-    });
+    // redis.set("username", req.user.username, function (err) {
+    //   if (err) {
+    //     // Something went wrong
+    //     console.error("error");
+    //   }
+    // });
   }
 
   console.log('req.session', req.session);
@@ -93,25 +88,27 @@ app.use(function (req, res, next) {
   res.locals.username = "";
   res.locals.showProfile = login;
 
-  redis.get("username", function (err, value) {
-    if (err) {
-      console.error("error while getting from req.redis");
-    } else {
-      res.locals.username = value;
-      res.locals.login = true;
+  // redis.get("username", function (err, value) {
+  //   if (err) {
+  //     console.error("error while getting from req.redis");
+  //   } else {
+  //     res.locals.username = value;
+  //     res.locals.login = true;
       
-      if (isMainDomain) {
-        res.locals.showProfile = true;
-      } else {
-        if (subdomain == value) {
-          res.locals.showProfile = true;
-        }
-      }
-    }
+  //     if (isMainDomain) {
+  //       res.locals.showProfile = true;
+  //     } else {
+  //       if (subdomain == value) {
+  //         res.locals.showProfile = true;
+  //       }
+  //     }
+  //   }
     
-    req.redis = redis;
-    next();
-  });
+  //   req.redis = redis;
+  //   next();
+  // });
+
+  next();
 
 });
 
