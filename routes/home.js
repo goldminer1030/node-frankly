@@ -9,11 +9,10 @@ router.get('/', function (req, res) {
     res.render('index');
   } else {
     var subdomain = res.locals.subdomain;
-    var loggedIn = false;
+    var loggedIn = res.locals.login;
     
     if(req.user) {
       subdomain = req.user.username;
-      loggedIn = true;
     }
     
     console.log('res.locals.username', res.locals.username);
