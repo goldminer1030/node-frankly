@@ -20,7 +20,7 @@ router.get('/', function (req, res) {
     console.log('subdomain', subdomain);
     User.findOne({ username: subdomain }, function (err, user) {
       if (!err && user) {
-        if ((req.user && subdomain == req.user.username) || (res.locals.username.lenth > 0 && res.locals.username == subdomain)) {
+        if ((req.user && subdomain == req.user.username) || res.locals.username == subdomain) {
           Message.find({ 'username': subdomain }).sort({ 'createdAt': -1 }).exec(function (err, message) {
             if (!err && message) {
               res.render('users/message', {
