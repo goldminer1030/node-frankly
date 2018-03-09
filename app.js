@@ -99,6 +99,7 @@ app.use('/login', require('./routes/login'));
 app.use('/forgot', require('./routes/forgot'));
 app.use('/reset', require('./routes/reset'));
 app.use('/register', require('./routes/register'));
+app.use('/userslist', require('./routes/userslist'));
 
 // send to facebook to do the authentication
 app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email'] }));
