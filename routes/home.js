@@ -10,7 +10,6 @@ router.get('/', function (req, res) {
   console.log('res.locals.isMainDomain', res.locals.isMainDomain);
   console.log('res.locals.username', res.locals.username);
   console.log('subdomain', subdomain);
-  console.log('loggedIn', loggedIn);
   
   if (res.locals.isMainDomain && !loggedIn) {
     // if main domain and not logged in
