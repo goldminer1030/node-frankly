@@ -24,6 +24,10 @@ var accessLogStream = rfs('access.log', {
   interval: '1d', // rotate daily
   path: logDirectory
 });
+// custom token
+morgan.token('id', function getId(req) {
+  return req.userid
+})
 // setup the logger
 app.use(morgan(':id :method :url :response-time', { stream: accessLogStream }));
 
