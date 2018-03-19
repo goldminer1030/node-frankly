@@ -25,7 +25,7 @@ var accessLogStream = rfs('access.log', {
   path: logDirectory
 });
 // setup the logger
-app.use(morgan('combined', { stream: accessLogStream }));
+app.use(morgan(':id :method :url :response-time', { stream: accessLogStream }));
 
 // Database
 mongoose.connect('mongodb://root:rootroot@ds135624.mlab.com:35624/frankly-db');
@@ -92,10 +92,11 @@ app.use(function (req, res, next) {
   res.locals.subdomain = subdomain;
   res.locals.login = login;
   res.locals.userid = "";
+  req.userid = 123456789;
   
   if (req.session) {
     if(req.session.passport && req.session.passport.user) {
-      var user = req.session.passport.user;
+      req.userid = req.session.passport.user;
       res.locals.login = true;
       res.locals.userid = req.session.passport.user;
     }
