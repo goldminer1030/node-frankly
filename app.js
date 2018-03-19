@@ -92,7 +92,7 @@ app.use(function (req, res, next) {
   res.locals.subdomain = subdomain;
   res.locals.login = login;
   res.locals.userid = "";
-  req.userid = 123456789;
+  req.userid = '123456789';
   
   if (req.session) {
     if(req.session.passport && req.session.passport.user) {
